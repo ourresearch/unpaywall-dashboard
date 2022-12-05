@@ -19,12 +19,10 @@ def dashboard():
 @login_required
 def refresh_doi():
     form = DOIRefreshForm()
-    if request.method == "POST":
-        doi = request.form.get("doi")
-        print(doi)
+    if form.validate_on_submit():
+        doi = form.doi.data
         if doi:
             # refresh doi
-            print("refreshing doi {}".format(doi))
             result = subprocess.run(
                 f"heroku run python queue_pub.py --method=refresh --id='{doi}' --app articlepage",
                 shell=True,
@@ -32,6 +30,6 @@ def refresh_doi():
             )
             output = result.stdout.decode("utf-8")
             return render_template(
-                "refresh_doi.html", output=output, current_user=current_user
+                "refresh_doi.html", output=output, current_user=current_user, form=form
             )
     return render_template("refresh_doi.html", current_user=current_user, form=form)
