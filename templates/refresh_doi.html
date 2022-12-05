@@ -26,14 +26,36 @@
             </form>
         </div>
     </div>
-    {% if output %}
+    {% if results %}
         <div class="card mb-3">
             <div class="card-header">
-                <h5 class="mb-0" data-anchor="data-anchor" id="quick-start">Result</h5>
+                <div class="row flex-between-end">
+                    <div class="col-auto align-self-center">
+                        <h5 class="mb-0" data-anchor="data-anchor">Results</h5>
+                    </div>
+                </div>
             </div>
-            <div class="card-body bg-light">
-                <p class="mb-0">{{ output }}</p>
-            </div>
+
+<div class="table-responsive scrollbar">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">DOI</th>
+        <th scope="col">Status</th>
+        <th class="text-end" scope="col">Result</th>
+      </tr>
+    </thead>
+    <tbody>
+        {%  for result in results %}
+          <tr>
+            <td>{{ result.id }}</td>
+            <td>{{ result.status }}</td>
+            <td>{{ result.result }}</td>
+          </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+</div>
         </div>
     {% endif %}
 {% endblock %}
