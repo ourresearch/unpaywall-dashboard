@@ -1,7 +1,10 @@
 import subprocess
 
-from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import login_required, logout_user, current_user, login_user
+from flask import Blueprint, render_template, request
+from flask_login import login_required, current_user
+
+from dashboard.forms import DOIRefreshForm
+
 
 dashboard_blueprint = Blueprint("dashboard", __name__)
 
@@ -15,6 +18,7 @@ def dashboard():
 @dashboard_blueprint.route("/refresh-doi", methods=["GET", "POST"])
 @login_required
 def refresh_doi():
+    form = DOIRefreshForm()
     if request.method == "POST":
         doi = request.form.get("doi")
         print(doi)
@@ -30,4 +34,4 @@ def refresh_doi():
             return render_template(
                 "refresh_doi.html", output=output, current_user=current_user
             )
-    return render_template("refresh_doi.html", current_user=current_user)
+    return render_template("refresh_doi.html", current_user=current_user, form=form)
