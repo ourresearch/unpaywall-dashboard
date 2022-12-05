@@ -1,18 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="card">
-        <div class="card-body overflow-hidden p-lg-6">
-            <div class="row align-items-center">
-                <div class="col-lg-6"><img class="img-fluid" src="../assets/img/icons/spot-illustrations/21.png"
-                                           alt=""/></div>
-                <div class="col-lg-6 ps-lg-4 my-5 text-center text-lg-start">
-                    <h3 class="text-primary">Edit me!</h3>
-                    <p class="lead">Create Something Beautiful.</p><a class="btn btn-falcon-primary"
-                                                                      href="../documentation/getting-started.html">Getting
-                    started</a>
+    <div class="card mb-3">
+        <div class="bg-holder d-none d-lg-block bg-card"
+             style="background-image:url(/static/assets/img/icons/spot-illustrations/corner-4.png);">
+        </div>
+        <!--/.bg-holder-->
+
+        <div class="card-body position-relative">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h3 class="mb-0">Unpaywall Dashboard</h3>
                 </div>
             </div>
         </div>
     </div>
+    <div class="card mb-3">
+            <div class="card-header">
+              <h5 class="mb-0" data-anchor="data-anchor" id="quick-start">Available Tasks</h5>
+            </div>
+            <div class="card-body bg-light">
+              <p class="mb-0"><a href="/refresh-doi">Refresh a DOI</a></p>
+            </div>
+          </div>
 {% endblock %}
