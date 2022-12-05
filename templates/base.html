@@ -1,0 +1,27 @@
+{% include "_header.html" %}
+<main class="main" id="top">
+    <div class="container" data-layout="container">
+        {% include "_left_nav.html" %}
+        <div class="content">
+            {% include "_top_nav.html" %}
+            {% block content %}{% endblock %}
+            {% include "_footer.html" %}
+        </div>
+    </div>
+</main>
+<!-- ===============================================-->
+<!--    JavaScripts-->
+<!-- ===============================================-->
+<script src="/static/vendors/popper/popper.min.js"></script>
+<script src="/static/vendors/bootstrap/bootstrap.min.js"></script>
+<script src="/static/vendors/anchorjs/anchor.min.js"></script>
+<script src="/static/vendors/is/is.min.js"></script>
+<script src="/static/vendors/fontawesome/all.min.js"></script>
+<script src="/static/vendors/lodash/lodash.min.js"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
+<script src="/static/vendors/list.js/list.min.js"></script>
+<script src="/static/assets/js/theme.js"></script>
+
+</body>
+
+</html>
