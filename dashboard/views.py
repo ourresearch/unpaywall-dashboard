@@ -25,8 +25,8 @@ def dashboard():
 def refresh_doi():
     form = DOIRefreshForm()
     if form.validate_on_submit():
-        refresh_doi_background.queue(form.doi.data, description=form.doi.data)
-        time.sleep(0.5)
+        refresh_doi_background.queue(form.doi.data, description=form.doi.data, result_ttl=5000)
+        time.sleep(0.3)
         return redirect(url_for("dashboard.refresh_doi"))
     queue = Queue("default", connection=rq.connection)
     started_jobs = StartedJobRegistry("default", connection=rq.connection)
