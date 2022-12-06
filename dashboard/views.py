@@ -1,7 +1,9 @@
 import time
+import json
 
 from flask import Blueprint, render_template, redirect, url_for
 from flask_login import login_required, current_user
+import requests
 from rq.queue import Queue
 from rq.job import Job
 from rq.registry import StartedJobRegistry, FinishedJobRegistry, FailedJobRegistry
@@ -14,10 +16,15 @@ from dashboard.forms import DOIRefreshForm
 dashboard_blueprint = Blueprint("dashboard", __name__)
 
 
-@dashboard_blueprint.route("/")
+@dashboard_blueprint.route("/", methods=["GET", "POST"])
 @login_required
 def dashboard():
-    return render_template("index.html", current_user=current_user)
+    form = DOIRefreshForm()
+    result = None
+    if form.validate_on_submit():
+        r = requests.get(f"https://api.unpaywall.org/v2/{form.doi.data}?email=support@unpaywall.org")
+        result = json.dumps(json.loads(r.text), indent=4)
+    return render_template("index.html", current_user=current_user, form=form, result=result)
 
 
 @dashboard_blueprint.route("/refresh-doi", methods=["GET", "POST"])

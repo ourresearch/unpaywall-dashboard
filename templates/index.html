@@ -16,11 +16,34 @@
         </div>
     </div>
     <div class="card mb-3">
-            <div class="card-header">
-              <h5 class="mb-0" data-anchor="data-anchor" id="quick-start">Available Tasks</h5>
-            </div>
-            <div class="card-body bg-light">
-              <p class="mb-0"><a href="/refresh-doi">Refresh a DOI</a></p>
-            </div>
-          </div>
+        <div class="card-header">
+            <h5 class="mb-0" id="quick-start">Look up a DOI</h5>
+        </div>
+        <div class="card-body bg-light">
+            <form action="/" method="post">
+                {{ form.csrf_token }}
+                <div class="mb-3">
+                    {{ form.doi.label(class="form-label") }}
+                    {{ form.doi(class="form-control") }}
+                    {% if form.doi.errors %}
+                        <ul class="errors">
+                            {% for error in form.doi.errors %}
+                                <li>{{ error }}</li>{% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                {{ form.submit(class="btn btn-primary") }}
+            </form>
+        </div>
+    </div>
+    {% if result %}
+        <div class="card mb-3">
+        <div class="card-header">
+            <h5 class="mb-0" data-anchor="data-anchor" id="quick-start">DOI Result</h5>
+        </div>
+        <div class="card-body bg-light">
+            <p class="mb-0"><pre><code>{{ result }}</code></pre></p>
+        </div>
+    </div>
+    {% endif %}
 {% endblock %}
