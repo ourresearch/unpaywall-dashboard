@@ -22,9 +22,13 @@ def dashboard():
     form = DOIRefreshForm()
     result = None
     if form.validate_on_submit():
-        r = requests.get(f"https://api.unpaywall.org/v2/{form.doi.data}?email=support@unpaywall.org")
+        r = requests.get(
+            f"https://api.unpaywall.org/v2/{form.doi.data}?email=support@unpaywall.org"
+        )
         result = json.dumps(json.loads(r.text), indent=4)
-    return render_template("index.html", current_user=current_user, form=form, result=result)
+    return render_template(
+        "index.html", current_user=current_user, form=form, result=result
+    )
 
 
 @dashboard_blueprint.route("/refresh-doi", methods=["GET", "POST"])
@@ -32,7 +36,9 @@ def dashboard():
 def refresh_doi():
     form = DOIRefreshForm()
     if form.validate_on_submit():
-        refresh_doi_background.queue(form.doi.data, description=form.doi.data, result_ttl=5000)
+        refresh_doi_background.queue(
+            form.doi.data, description=form.doi.data, result_ttl=5000
+        )
         time.sleep(0.3)
         return redirect(url_for("dashboard.refresh_doi"))
     queue = Queue("default", connection=rq.connection)
