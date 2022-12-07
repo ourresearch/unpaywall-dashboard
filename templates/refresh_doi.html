@@ -31,57 +31,43 @@
             <div class="card-header">
                 <div class="row flex-between-end">
                     <div class="col-auto align-self-center">
-                        <h5 class="mb-0">Recent Results</h5>
+                        <h4 class="mb-0" data-anchor="data-anchor" id="card-with-background">Recent results</h4>
                     </div>
                 </div>
             </div>
-
-            <div class="table-responsive scrollbar">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">DOI</th>
-                        <th scope="col">Status</th>
-                        <th class="text-end" scope="col">Result</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for result in results %}
-                        <tr>
-                            <td>{{ result.doi }}</td>
-                            <td>{{ result.status }}</td>
-                            <td>
-                                <button class="btn btn-primary" type="button" data-bs-toggle="modal"
-                                        data-bs-target="#scrollinglongcontent">Details
-                                </button>
-                                <div class="modal fade" id="scrollinglongcontent" data-keyboard="false" tabindex="-1"
-                                     aria-labelledby="scrollinglongcontentLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="scrollinglongcontentLabel">Details</h5>
-                                                <button class="btn-close" type="button" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body modal-dialog modal-dialog-scrollable mt-0">
-                                                <p>
-                                                    {{ result.result }}
-                                                </p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">
-                                                    Close
-                                                </button>
-                                            </div>
-                                        </div>
+            {% for result in results %}
+                <div class="card-body bg-light">
+                    <div class="card mb-3">
+                        <div class="card-body position-relative">
+                            <div class="row">
+                                {% if loop.index == 1 %}
+                                <div class="col-lg-8">
+                                    <h5>DOI: {{ result.doi }}</h5>
+                                    <p class="mb-0">Timestamp: {{ result.timestamp }}</p>
+                                    <p class="mt-2">{{ result.result }}</p>
+                                </div>
+                                {% else %}
+                                    <div class="col-lg-8">
+                                    <h5>DOI: {{ result.doi }}</h5>
+                                    <p class="mb-0">Timestamp: {{ result.timestamp }}</p>
+                                </div>
+                                <p>
+                                    <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample"
+                                       role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        Details
+                                    </a>
+                                </p>
+                                <div class="collapse" id="collapseExample">
+                                    <div class="card card-body">
+                                        {{ result.result}}
                                     </div>
                                 </div>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
     {% endif %}
 {% endblock %}

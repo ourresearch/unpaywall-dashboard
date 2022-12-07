@@ -1,7 +1,8 @@
 import time
 import json
+import re
 
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, Markup
 from flask_login import login_required, current_user
 import requests
 from rq.queue import Queue
@@ -54,8 +55,19 @@ def refresh_doi():
     results = []
     for job_id in job_ids:
         job = Job.fetch(job_id, connection=rq.connection)
+        if job.is_finished:
+            result = re.sub("\d+:", "<br>", job.result)
+            result = result.replace("<meta http-equiv=", "")
+            result = Markup(result)
+        else:
+            result = None
         results.append(
-            {"doi": job.description, "status": job.get_status(), "result": job.result}
+            {
+                "doi": job.description,
+                "status": job.get_status(),
+                "result": result,
+                "timestamp": job.enqueued_at,
+            }
         )
     return render_template(
         "refresh_doi.html", current_user=current_user, form=form, results=results
