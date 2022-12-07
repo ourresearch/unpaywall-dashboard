@@ -55,7 +55,7 @@ def refresh_doi():
     results = []
     for job_id in job_ids:
         job = Job.fetch(job_id, connection=rq.connection)
-        if job.is_finished:
+        if job.result:
             result = re.sub("\d+:", "<br>", job.result)
             result = result.replace("<meta http-equiv=", "")
             result = Markup(result)
