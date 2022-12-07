@@ -41,27 +41,28 @@
                         <div class="card-body position-relative">
                             <div class="row">
                                 {% if loop.index == 1 %}
-                                <div class="col-lg-8">
-                                    <h5>DOI: {{ result.doi }}</h5>
-                                    <p class="mb-0">Timestamp: {{ result.timestamp }}</p>
-                                    <p class="mt-2">{{ result.result }}</p>
-                                </div>
+                                    <div class="col-lg-8">
+                                        <h5>DOI: {{ result.doi }}</h5>
+                                        <p class="mb-0">Timestamp: {{ result.timestamp }}</p>
+                                        <p class="mt-2">{{ result.result }}</p>
+                                    </div>
                                 {% else %}
                                     <div class="col-lg-8">
-                                    <h5>DOI: {{ result.doi }}</h5>
-                                    <p class="mb-0">Timestamp: {{ result.timestamp }}</p>
-                                </div>
-                                <p>
-                                    <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample"
-                                       role="button" aria-expanded="false" aria-controls="collapseExample">
-                                        Details
-                                    </a>
-                                </p>
-                                <div class="collapse" id="collapseExample">
-                                    <div class="card card-body">
-                                        {{ result.result}}
+                                        <h5>DOI: {{ result.doi }}</h5>
+                                        <p class="mb-0">Timestamp: {{ result.timestamp }}</p>
                                     </div>
-                                </div>
+                                    <p>
+                                        <a class="btn btn-primary" data-bs-toggle="collapse"
+                                           href="#collapse{{ loop.index }}"
+                                           role="button" aria-expanded="false" aria-controls="collapse{{ loop.index }}">
+                                            Details
+                                        </a>
+                                    </p>
+                                    <div class="collapse" id="collapse{{ loop.index }}">
+                                        <div class="card card-body">
+                                            {{ result.result }}
+                                        </div>
+                                    </div>
                                 {% endif %}
                             </div>
                         </div>
