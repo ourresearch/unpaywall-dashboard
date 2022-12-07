@@ -48,9 +48,9 @@ def refresh_doi():
     failed_jobs = FailedJobRegistry("default", connection=rq.connection)
     job_ids = (
         started_jobs.get_job_ids()
+        + queue.get_job_ids()
         + finished_jobs.get_job_ids()
         + failed_jobs.get_job_ids()
-        + queue.get_job_ids()
     )
     results = []
     for job_id in job_ids:
@@ -69,6 +69,7 @@ def refresh_doi():
                 "timestamp": job.enqueued_at,
             }
         )
+        results = sorted(results, key=lambda d: d['timestamp'], reverse=True)
     return render_template(
         "refresh_doi.html", current_user=current_user, form=form, results=results
     )
