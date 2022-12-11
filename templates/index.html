@@ -37,33 +37,62 @@
     </div>
     {% if result %}
         <div class="card mb-3">
-            <div class="card-header">
-                <h5 class="mb-0" id="quick-start">DOI {{ doi }}</h5>
+        <h5 class="card-header d-flex justify-content-between align-items-center">
+            DOI {{ doi }} <a href="{{ result.doi_url }}" target="_blank"><icon class="fas fa-external-link-alt"></icon></a>
+            <div>
+                {% if result.is_oa %}
+                    <span class="badge badge-soft-success">Open Access</span>
+                    <span class="badge badge-soft-info">{{ result.oa_status }}</span>
+                {% else %}
+                    <span class="badge badge-soft-danger">Closed</span>
+                {% endif %}
             </div>
-            <div class="card-body bg-soft-light">
-                <div class="mb-3">
-                    <p><h5 class="mb-0">Details</h5></p>
-                    {% if result.title %}<p><b>Title:</b> {{ result.title }}</p>{% endif %}
-                    {% if result.is_oa %}<p><b>Open Access:</b> {{ result.is_oa }}</p>{% endif %}
-                    {% if result.oa_status %}<p><b>Status:</b> {{ result.oa_status }}</p>{% endif %}
-                    {% if result.published_date %}<p><b>Publication Date:</b> {{ result.published_date }}</p>{% endif %}
-                    {% if result.doi_url %}<p><b>DOI URL:</b> <a href="{{ result.doi_url }}" target="_blank">{{ result.doi_url }}</a></p>{% endif %}
-                    {% if result.updated %}<p><b>Updated:</b> {{ result.updated }}</p>{% endif %}
 
+        </h5>
+        <div class="card-body bg-soft-light">
+            <div class="mb-3">
+                {% if result.message %}{{ result.message }}{% endif %}
+                <p><h5 class="mb-0">Details</h5></p>
+                {% if result.title %}<p><b>Title:</b> {{ result.title }}</p>{% endif %}
+                {% if result.published_date %}<p><b>Publication Date:</b> {{ result.published_date }}</p>{% endif %}
+                {% if result.updated %}<p><b>Updated:</b> {{ result.updated }}</p>{% endif %}
 
-                    <p><h5 class="mb-0">Journal</h5></p>
-                    {% if result.journal_name %}<p><b>Journal Name:</b> {{ result.journal_name }}</p>{% endif %}
-                    {% if result.publisher %}<p><b>Publisher:</b> {{ result.publisher }}</p>{% endif %}
-                    {% if result.journal_issn_l %}<p><b>Journal ISSN-L:</b> {{ result.journal_issn_l }}</p>{% endif %}
-                    {% if result.journal_issns %}<p><b>Journal ISSNs:</b> {{ result.journal_issns }}</p>{% endif %}
-                    {% if result.journal_is_oa %}<p><b>Journal is Open Access:</b> {{ result.journal_is_oa }}</p>{% endif %}
-                    {% if result.journal_is_in_doaj %}<p><b>Journal is in DOAJ:</b> {{ result.journal_is_in_doaj }}</p>{% endif %}
+                <p><h5 class="mb-0">Journal</h5></p>
+                {% if result.journal_name %}<p><b>Journal Name:</b> {{ result.journal_name }}</p>{% endif %}
+                {% if result.publisher %}<p><b>Publisher:</b> {{ result.publisher }}</p>{% endif %}
+                {% if result.journal_issn_l %}<p><b>Journal ISSN-L:</b> {{ result.journal_issn_l }}</p>{% endif %}
+                {% if result.journal_issns %}<p><b>Journal ISSNs:</b> {{ result.journal_issns }}</p>{% endif %}
+                {% if result.journal_is_oa %}<p><b>Journal is Open Access:</b> {{ result.journal_is_oa }}</p>{% endif %}
+                {% if result.journal_is_in_doaj %}
+                    <p><b>Journal is in DOAJ:</b> {{ result.journal_is_in_doaj }}</p>{% endif %}
+                <p><h5 class="mb-0">Best Open Access Location</h5></p>
+                {% if result.best_oa_location and result.best_oa_location.url %}
+                    <p><b>URL:</b> {{ result.best_oa_location.url }}</p>{% endif %}
+                {% if result.best_oa_location and result.best_oa_location.url_for_pdf %}
+                    <p><b>PDF URL:</b> {{ result.best_oa_location.url_for_pdf }}</p>{% endif %}
+                {% if result.best_oa_location and result.best_oa_location.url_for_landing_page %}
+                    <p><b>Landing Page:</b> {{ result.best_oa_location.url_for_landing_page }}</p>{% endif %}
+                {% if result.best_oa_location and result.best_oa_location.evidence %}
+                    <p><b>Evidence:</b> {{ result.best_oa_location.evidence }}</p>{% endif %}
+                {% if result.best_oa_location and result.best_oa_location.license %}
+                    <p><b>License:</b> {{ result.best_oa_location.license }}</p>{% endif %}
+                {% if result.best_oa_location and result.best_oa_location.version %}
+                    <p><b>Version:</b> {{ result.best_oa_location.version }}</p>{% endif %}
+                {% if result.best_oa_location and result.best_oa_location.host_type %}
+                    <p><b>Host Type:</b> {{ result.best_oa_location.host_type }}</p>{% endif %}
+                {% if result.best_oa_location and result.best_oa_location.pmh_id %}
+                    <p><b>PMH ID:</b> {{ result.best_oa_location.pmh_id }}</p>{% endif %}
+                {% if result.best_oa_location and result.best_oa_location.endpoint_id %}
+                    <p><b>Endpoint ID:</b> {{ result.best_oa_location.endpoint_id }}</p>{% endif %}
+                {% if result.best_oa_location and result.best_oa_location.repository_institution %}
+                    <p><b>Repository Institution:</b> {{ result.best_oa_location.repository_institution }}
+                    </p>{% endif %}
+                {% if result.best_oa_location and result.best_oa_location.oa_date %}
+                    <p><b>OA Date:</b> {{ result.best_oa_location.oa_date }}</p>{% endif %}
 
-                    <p><h5 class="mb-0">Misc</h5></p>
-                    {% if result.is_paratext %}<p><b>Has Paratext:</b> {{ result.is_paratext }}</p>{% endif %}
-                    {% if result.publisher %}<p><b>Publisher:</b> {{ result.publisher }}</p>{% endif %}
-                    {% if result.journal_issns %}<p><b>Journal ISSN-L:</b> {{ result.journal_issn_l }}</p>{% endif %}
-                </div>
+                <p><h5 class="mb-0">Misc</h5></p>
+                {% if result.is_paratext %}<p><b>Has Paratext:</b> {{ result.is_paratext }}</p>{% endif %}
+            </div>
         </div>
     {% endif %}
 {% endblock %}
