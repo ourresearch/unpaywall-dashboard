@@ -20,8 +20,7 @@
             <h5 class="mb-0" id="quick-start">Look up a DOI</h5>
         </div>
         <div class="card-body bg-light">
-            <form action="/" method="post">
-                {{ form.csrf_token }}
+            <form action="/" method="GET">
                 <div class="mb-3">
                     {{ form.doi.label(class="form-label") }}
                     {{ form.doi(class="form-control") }}
@@ -38,12 +37,33 @@
     </div>
     {% if result %}
         <div class="card mb-3">
-        <div class="card-header">
-            <h5 class="mb-0" data-anchor="data-anchor" id="quick-start">DOI Result</h5>
+            <div class="card-header">
+                <h5 class="mb-0" id="quick-start">DOI {{ doi }}</h5>
+            </div>
+            <div class="card-body bg-soft-light">
+                <div class="mb-3">
+                    <p><h5 class="mb-0">Details</h5></p>
+                    {% if result.title %}<p><b>Title:</b> {{ result.title }}</p>{% endif %}
+                    {% if result.is_oa %}<p><b>Open Access:</b> {{ result.is_oa }}</p>{% endif %}
+                    {% if result.oa_status %}<p><b>Status:</b> {{ result.oa_status }}</p>{% endif %}
+                    {% if result.published_date %}<p><b>Publication Date:</b> {{ result.published_date }}</p>{% endif %}
+                    {% if result.doi_url %}<p><b>DOI URL:</b> <a href="{{ result.doi_url }}" target="_blank">{{ result.doi_url }}</a></p>{% endif %}
+                    {% if result.updated %}<p><b>Updated:</b> {{ result.updated }}</p>{% endif %}
+
+
+                    <p><h5 class="mb-0">Journal</h5></p>
+                    {% if result.journal_name %}<p><b>Journal Name:</b> {{ result.journal_name }}</p>{% endif %}
+                    {% if result.publisher %}<p><b>Publisher:</b> {{ result.publisher }}</p>{% endif %}
+                    {% if result.journal_issn_l %}<p><b>Journal ISSN-L:</b> {{ result.journal_issn_l }}</p>{% endif %}
+                    {% if result.journal_issns %}<p><b>Journal ISSNs:</b> {{ result.journal_issns }}</p>{% endif %}
+                    {% if result.journal_is_oa %}<p><b>Journal is Open Access:</b> {{ result.journal_is_oa }}</p>{% endif %}
+                    {% if result.journal_is_in_doaj %}<p><b>Journal is in DOAJ:</b> {{ result.journal_is_in_doaj }}</p>{% endif %}
+
+                    <p><h5 class="mb-0">Misc</h5></p>
+                    {% if result.is_paratext %}<p><b>Has Paratext:</b> {{ result.is_paratext }}</p>{% endif %}
+                    {% if result.publisher %}<p><b>Publisher:</b> {{ result.publisher }}</p>{% endif %}
+                    {% if result.journal_issns %}<p><b>Journal ISSN-L:</b> {{ result.journal_issn_l }}</p>{% endif %}
+                </div>
         </div>
-        <div class="card-body bg-light">
-            <p class="mb-0"><pre><code>{{ result }}</code></pre></p>
-        </div>
-    </div>
     {% endif %}
 {% endblock %}

@@ -2,7 +2,7 @@ import time
 import json
 import re
 
-from flask import Blueprint, render_template, redirect, url_for, Markup
+from flask import Blueprint, render_template, redirect, url_for, Markup, request
 from flask_login import login_required, current_user
 import requests
 from rq.queue import Queue
@@ -11,31 +11,32 @@ from rq.registry import StartedJobRegistry, FinishedJobRegistry, FailedJobRegist
 
 from app import rq
 from dashboard.background import refresh_doi_background
-from dashboard.forms import DOIRefreshForm
+from dashboard.forms import DOIForm
 
 
 dashboard_blueprint = Blueprint("dashboard", __name__)
 
 
-@dashboard_blueprint.route("/", methods=["GET", "POST"])
+@dashboard_blueprint.route("/")
 @login_required
 def dashboard():
-    form = DOIRefreshForm()
+    form = DOIForm()
+    doi = request.args.get("doi")
     result = None
-    if form.validate_on_submit():
+    if doi:
         r = requests.get(
-            f"https://api.unpaywall.org/v2/{form.doi.data}?email=support@unpaywall.org"
+            f"https://api.unpaywall.org/v2/{doi}?email=support@unpaywall.org"
         )
-        result = json.dumps(json.loads(r.text), indent=4)
+        result = dict(r.json())
     return render_template(
-        "index.html", current_user=current_user, form=form, result=result
+        "index.html", current_user=current_user, form=form, result=result, doi=doi
     )
 
 
 @dashboard_blueprint.route("/refresh-doi", methods=["GET", "POST"])
 @login_required
 def refresh_doi():
-    form = DOIRefreshForm()
+    form = DOIForm()
     if form.validate_on_submit():
         refresh_doi_background.queue(
             form.doi.data, description=form.doi.data, result_ttl=5000
