@@ -15,83 +15,145 @@
             </div>
         </div>
     </div>
-    <div class="card mb-3">
-        <div class="card-header">
-            <h5 class="mb-0" id="quick-start">Look up a DOI</h5>
+    {% if not result %}
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5 class="mb-0" id="quick-start">Look up a DOI</h5>
+            </div>
+            <div class="card-body bg-light">
+                <form action="/" method="GET">
+                    <div class="mb-3">
+                        {{ form.doi.label(class="form-label") }}
+                        {{ form.doi(class="form-control") }}
+                        {% if form.doi.errors %}
+                            <ul class="errors">
+                                {% for error in form.doi.errors %}
+                                    <li>{{ error }}</li>{% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    {{ form.submit(class="btn btn-primary") }}
+                </form>
+            </div>
         </div>
-        <div class="card-body bg-light">
-            <form action="/" method="GET">
-                <div class="mb-3">
-                    {{ form.doi.label(class="form-label") }}
-                    {{ form.doi(class="form-control") }}
-                    {% if form.doi.errors %}
-                        <ul class="errors">
-                            {% for error in form.doi.errors %}
-                                <li>{{ error }}</li>{% endfor %}
-                        </ul>
-                    {% endif %}
-                </div>
-                {{ form.submit(class="btn btn-primary") }}
-            </form>
-        </div>
-    </div>
+    {% endif %}
     {% if result %}
         <div class="card mb-3">
-        <h5 class="card-header d-flex justify-content-between align-items-center">
-            DOI {{ doi }} <a href="{{ result.doi_url }}" target="_blank"><icon class="fas fa-external-link-alt"></icon></a>
-            <div>
-                {% if result.is_oa %}
-                    <span class="badge badge-soft-success">Open Access</span>
-                    <span class="badge badge-soft-info">{{ result.oa_status }}</span>
-                {% else %}
-                    <span class="badge badge-soft-danger">Closed</span>
-                {% endif %}
+        <div class="card-header">
+            <div class="row flex-between-end">
+                <div class="col-auto align-self-center">
+                    <h5 class="mb-0">DOI {{ doi }}</h5>
+                    <p class="mb-0 pt-1 mt-2 mb-0">{% if result.is_oa %}
+                        <span class="badge badge-soft-success">Open Access</span>
+                        <span class="badge badge-soft-info">{{ result.oa_status }}</span>
+                    {% else %}
+                        <span class="badge badge-soft-danger">Closed</span>
+                    {% endif %}</p>
+                </div>
             </div>
+        </div>
+        <div class="card-body">
+        <h5>{{ result.title }}</h5>
+        <p>Published by {{ result.publisher }} in {{ result.journal_name }}</p>
+            <div class="row">
+                <div class="col-12">
+                    <div class="overflow-hidden mt-4">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation"><a
+                                    class="nav-link ps-0 active" id="description-tab"
+                                    data-bs-toggle="tab" href="#tab-description" role="tab"
+                                    aria-controls="tab-description" aria-selected="true">Best OA
+                                Location</a>
+                            </li>
+                            <li class="nav-item" role="presentation"><a
+                                    class="nav-link px-2 px-md-3" id="specifications-tab"
+                                    data-bs-toggle="tab" href="#tab-specifications" role="tab"
+                                    aria-controls="tab-specifications" aria-selected="false"
+                                    tabindex="-1">Journal</a></li>
+                            <li class="nav-item" role="presentation"><a
+                                    class="nav-link px-2 px-md-3" id="reviews-tab"
+                                    data-bs-toggle="tab" href="#tab-reviews" role="tab"
+                                    aria-controls="tab-reviews" aria-selected="false"
+                                    tabindex="-1">Other OA Locations</a></li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade active show" id="tab-description"
+                                 role="tabpanel" aria-labelledby="description-tab">
+                                <div class="mt-3">
+                                    {% if result.best_oa_location and result.best_oa_location.url %}
+                                        <p><b>URL:</b> {{ result.best_oa_location.url }}
+                                        </p>{% endif %}
+                                    {% if result.best_oa_location and result.best_oa_location.url_for_pdf %}
+                                        <p><b>PDF
+                                            URL:</b> {{ result.best_oa_location.url_for_pdf }}
+                                        </p>{% endif %}
+                                    {% if result.best_oa_location and result.best_oa_location.url_for_landing_page %}
+                                        <p><b>Landing
+                                            Page:</b> {{ result.best_oa_location.url_for_landing_page }}
+                                        </p>{% endif %}
+                                    {% if result.best_oa_location and result.best_oa_location.evidence %}
+                                        <p>
+                                            <b>Evidence:</b> {{ result.best_oa_location.evidence }}
+                                        </p>{% endif %}
+                                    {% if result.best_oa_location and result.best_oa_location.license %}
+                                        <p><b>License:</b> {{ result.best_oa_location.license }}
+                                        </p>{% endif %}
+                                    {% if result.best_oa_location and result.best_oa_location.version %}
+                                        <p><b>Version:</b> {{ result.best_oa_location.version }}
+                                        </p>{% endif %}
+                                    {% if result.best_oa_location and result.best_oa_location.host_type %}
+                                        <p><b>Host
+                                            Type:</b> {{ result.best_oa_location.host_type }}
+                                        </p>{% endif %}
+                                    {% if result.best_oa_location and result.best_oa_location.pmh_id %}
+                                        <p><b>PMH ID:</b> {{ result.best_oa_location.pmh_id }}
+                                        </p>{% endif %}
+                                    {% if result.best_oa_location and result.best_oa_location.endpoint_id %}
+                                        <p><b>Endpoint
+                                            ID:</b> {{ result.best_oa_location.endpoint_id }}
+                                        </p>{% endif %}
+                                    {% if result.best_oa_location and result.best_oa_location.repository_institution %}
+                                        <p><b>Repository
+                                            Institution:</b> {{ result.best_oa_location.repository_institution }}
+                                        </p>{% endif %}
+                                    {% if result.best_oa_location and result.best_oa_location.oa_date %}
+                                        <p><b>OA Date:</b> {{ result.best_oa_location.oa_date }}
+                                        </p>{% endif %}
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="tab-specifications" role="tabpanel"
+                                 aria-labelledby="specifications-tab">
+                            <div class="mt-3">
+                                {% if result.journal_name %}
+                                    <p><b>Name:</b> {{ result.journal_name }}</p>{% endif %}
+                                {% if result.publisher %}
+                                    <p><b>Publisher:</b> {{ result.publisher }}</p>{% endif %}
+                                {% if result.journal_issn_l %}
+                                    <p><b>ISSN-L:</b> {{ result.journal_issn_l }}
+                                    </p>{% endif %}
+                                {% if result.journal_issns %}
+                                    <p><b>ISSNs:</b> {{ result.journal_issns }}
+                                    </p>{% endif %}
+                                {% if result.journal_is_oa %}
+                                    <p><b>Journal is Open Access:</b> {{ result.journal_is_oa }}
+                                    </p>{% endif %}
+                                {% if result.journal_is_in_doaj %}
+                                    <p><b>Journal is in DOAJ:</b> {{ result.journal_is_in_doaj }}
+                                    </p>{% endif %}
+                            </div>
+                            </div>
+                            <div class="tab-pane fade" id="tab-reviews" role="tabpanel"
+                                 aria-labelledby="reviews-tab">
+                                <div class="row mt-3">
+                                    <div class="col-lg-6 mb-4 mb-lg-0">
+                                        <div class="mb-1"
+                                    </div>
 
-        </h5>
-        <div class="card-body bg-soft-light">
-            <div class="mb-3">
-                {% if result.message %}{{ result.message }}{% endif %}
-                <p><h5 class="mb-0">Details</h5></p>
-                {% if result.title %}<p><b>Title:</b> {{ result.title }}</p>{% endif %}
-                {% if result.published_date %}<p><b>Publication Date:</b> {{ result.published_date }}</p>{% endif %}
-                {% if result.updated %}<p><b>Updated:</b> {{ result.updated }}</p>{% endif %}
-
-                <p><h5 class="mb-0">Journal</h5></p>
-                {% if result.journal_name %}<p><b>Journal Name:</b> {{ result.journal_name }}</p>{% endif %}
-                {% if result.publisher %}<p><b>Publisher:</b> {{ result.publisher }}</p>{% endif %}
-                {% if result.journal_issn_l %}<p><b>Journal ISSN-L:</b> {{ result.journal_issn_l }}</p>{% endif %}
-                {% if result.journal_issns %}<p><b>Journal ISSNs:</b> {{ result.journal_issns }}</p>{% endif %}
-                {% if result.journal_is_oa %}<p><b>Journal is Open Access:</b> {{ result.journal_is_oa }}</p>{% endif %}
-                {% if result.journal_is_in_doaj %}
-                    <p><b>Journal is in DOAJ:</b> {{ result.journal_is_in_doaj }}</p>{% endif %}
-                <p><h5 class="mb-0">Best Open Access Location</h5></p>
-                {% if result.best_oa_location and result.best_oa_location.url %}
-                    <p><b>URL:</b> {{ result.best_oa_location.url }}</p>{% endif %}
-                {% if result.best_oa_location and result.best_oa_location.url_for_pdf %}
-                    <p><b>PDF URL:</b> {{ result.best_oa_location.url_for_pdf }}</p>{% endif %}
-                {% if result.best_oa_location and result.best_oa_location.url_for_landing_page %}
-                    <p><b>Landing Page:</b> {{ result.best_oa_location.url_for_landing_page }}</p>{% endif %}
-                {% if result.best_oa_location and result.best_oa_location.evidence %}
-                    <p><b>Evidence:</b> {{ result.best_oa_location.evidence }}</p>{% endif %}
-                {% if result.best_oa_location and result.best_oa_location.license %}
-                    <p><b>License:</b> {{ result.best_oa_location.license }}</p>{% endif %}
-                {% if result.best_oa_location and result.best_oa_location.version %}
-                    <p><b>Version:</b> {{ result.best_oa_location.version }}</p>{% endif %}
-                {% if result.best_oa_location and result.best_oa_location.host_type %}
-                    <p><b>Host Type:</b> {{ result.best_oa_location.host_type }}</p>{% endif %}
-                {% if result.best_oa_location and result.best_oa_location.pmh_id %}
-                    <p><b>PMH ID:</b> {{ result.best_oa_location.pmh_id }}</p>{% endif %}
-                {% if result.best_oa_location and result.best_oa_location.endpoint_id %}
-                    <p><b>Endpoint ID:</b> {{ result.best_oa_location.endpoint_id }}</p>{% endif %}
-                {% if result.best_oa_location and result.best_oa_location.repository_institution %}
-                    <p><b>Repository Institution:</b> {{ result.best_oa_location.repository_institution }}
-                    </p>{% endif %}
-                {% if result.best_oa_location and result.best_oa_location.oa_date %}
-                    <p><b>OA Date:</b> {{ result.best_oa_location.oa_date }}</p>{% endif %}
-
-                <p><h5 class="mb-0">Misc</h5></p>
-                {% if result.is_paratext %}<p><b>Has Paratext:</b> {{ result.is_paratext }}</p>{% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     {% endif %}
