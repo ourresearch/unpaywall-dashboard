@@ -25,10 +25,12 @@ def refresh_doi_background(doi):
 
     # compare the two
     is_changed = False
-    for k, v in new.items():
-        if v != old.get(k):
+    for k, v in old.get("best_oa_location", {}).items():
+        if k != "updated" and new["best_oa_location"].get(k) != v:
             is_changed = True
-            break
+    if old.get("oa_status") != new.get("oa_status"):
+        is_changed = True
+
     if old.get("is_oa") is True and new.get("is_oa") is False:
         switched_to_closed = True
     elif old.get("is_oa") is False and new.get("is_oa") is True:
