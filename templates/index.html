@@ -46,7 +46,7 @@
             </div>
             <div class="col-auto ms-auto">
                 <div class="flex-grow-1">
-                    <a href="/"><button class="btn btn-primary btn-sm">Refresh</button></a>
+                    <button class="btn btn-primary btn-sm" onclick="refreshDoi()" id="refreshDoiButton">Refresh</button>
                 </div>
             </div>
             <div class="card-body">
@@ -213,5 +213,27 @@
                 <a class="btn btn-falcon-default btn-sm" href="/">New Search</a>
             </div>
         </div>
+        <script>
+        function refreshDoi() {
+            // refresh doi then poll for status
+          fetch("/refresh-doi/{{ doi }}")
+              .then((response) => response.json())
+              .then((data) => getStatus(data.job_id));
+        }
+        function getStatus(jobId) {
+            // poll for status
+            fetch("/refresh-status/" + jobId)
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.status === "queued" || data.status === "started") {
+                        console.log(data.status);
+                        setTimeout(() => getStatus(jobId), 1000);
+                    } else {
+                        console.log(data.status);
+                    }
+                });
+        }
+
+        </script>
     {% endif %}
 {% endblock %}

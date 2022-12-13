@@ -1,8 +1,7 @@
 import time
-import json
 import re
 
-from flask import Blueprint, render_template, redirect, url_for, Markup, request
+from flask import Blueprint, render_template, redirect, url_for, Markup, request, jsonify
 from flask_login import login_required, current_user
 import requests
 from rq.queue import Queue
@@ -76,4 +75,30 @@ def refresh_doi():
         results = sorted(results, key=lambda d: d['timestamp'], reverse=True)
     return render_template(
         "refresh_doi.html", current_user=current_user, form=form, results=results
+    )
+
+
+@dashboard_blueprint.route("/refresh-doi/<path:doi>")
+@login_required
+def start_fresh(doi):
+    job = refresh_doi_background.queue(doi, description=doi, result_ttl=5000)
+    return jsonify({"job_id": job.get_id()})
+
+
+@dashboard_blueprint.route("/refresh-status/<path:job_id>")
+@login_required
+def refresh_status(job_id):
+    job = Job.fetch(job_id, connection=rq.connection)
+    if job.result:
+        result = re.sub("\d+:", "<br>", job.result)
+        result = result.replace("<meta http-equiv=", "")
+        result = Markup(result)
+    else:
+        result = None
+    return jsonify(
+        {
+            "status": job.get_status(),
+            "result": result,
+            "timestamp": job.enqueued_at,
+        }
     )
