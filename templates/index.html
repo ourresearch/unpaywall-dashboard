@@ -226,9 +226,13 @@
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.status === "queued" || data.status === "started") {
+                        // change button to spinning
+                        document.getElementById("refreshDoiButton").innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Refreshing...';
                         console.log(data.status);
                         setTimeout(() => getStatus(jobId), 1000);
                     } else {
+                        // change button to success
+                        document.getElementById("refreshDoiButton").innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Refreshed';
                         console.log(data.status);
                     }
                 });

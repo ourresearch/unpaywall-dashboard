@@ -89,10 +89,8 @@ def start_fresh(doi):
 @login_required
 def refresh_status(job_id):
     job = Job.fetch(job_id, connection=rq.connection)
-    if job.result:
-        result = re.sub("\d+:", "<br>", job.result)
-        result = result.replace("<meta http-equiv=", "")
-        result = Markup(result)
+    if job.result and job.is_finished:
+        result = job.result[0]
     else:
         result = None
     return jsonify(
