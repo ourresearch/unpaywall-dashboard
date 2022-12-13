@@ -90,7 +90,7 @@ def start_fresh(doi):
 def refresh_status(job_id):
     job = Job.fetch(job_id, connection=rq.connection)
     if job.result and job.is_finished:
-        result = job.result[0]
+        result = job.result
     else:
         result = None
     return jsonify(
