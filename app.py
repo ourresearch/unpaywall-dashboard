@@ -14,6 +14,7 @@ if uri.startswith("postgres://"):
 
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev")
 app.config["SQLALCHEMY_DATABASE_URI"] = uri
+app.config["SQLALCHEMY_BINDS"] = {"unpaywall_db": os.environ.get("UNPAYWALL_DB")}
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["RQ_REDIS_URL"] = os.environ.get("REDIS_URL", "redis://localhost:6379")
 

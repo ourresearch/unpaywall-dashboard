@@ -1,16 +1,25 @@
 import time
 import re
 
-from flask import Blueprint, render_template, redirect, url_for, Markup, request, jsonify
+from flask import (
+    Blueprint,
+    render_template,
+    redirect,
+    url_for,
+    Markup,
+    request,
+    jsonify,
+)
 from flask_login import login_required, current_user
 import requests
 from rq.queue import Queue
 from rq.job import Job
 from rq.registry import StartedJobRegistry, FinishedJobRegistry, FailedJobRegistry
 
-from app import rq
+from app import db, rq
 from dashboard.background import refresh_doi_background
 from dashboard.forms import DOIForm
+from dashboard.models import OAManual
 
 
 dashboard_blueprint = Blueprint("dashboard", __name__)
@@ -72,7 +81,7 @@ def refresh_doi():
                 "timestamp": job.enqueued_at,
             }
         )
-        results = sorted(results, key=lambda d: d['timestamp'], reverse=True)
+        results = sorted(results, key=lambda d: d["timestamp"], reverse=True)
     return render_template(
         "refresh_doi.html", current_user=current_user, form=form, results=results
     )
@@ -100,3 +109,14 @@ def refresh_status(job_id):
             "timestamp": job.enqueued_at,
         }
     )
+
+
+@dashboard_blueprint.route("/add-manual")
+@login_required
+def add_manual():
+    doi = request.args.get("doi")
+    if doi:
+        oa_manual = OAManual(doi=doi)
+        db.session.add(oa_manual)
+        db.session.commit()
+    return redirect(url_for("dashboard.dashboard", doi=doi))
