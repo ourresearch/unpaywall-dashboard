@@ -59,7 +59,7 @@
             </div>
             <div class="card-body">
                 <h5>{{ result.title }}</h5>
-                <p>Published by {{ result.publisher }} in {{ result.journal_name }}</p>
+                <p>Published by {{ result.publisher }} in {{ result.journal_name }} on {{ result.published_date }}</p>
                 <p>{% if result.is_oa %}
                     <span class="badge badge-soft-success">Open Access</span>
                     <span class="badge badge-soft-info">{{ result.oa_status }}</span>
