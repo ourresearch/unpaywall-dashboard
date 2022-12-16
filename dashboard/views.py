@@ -19,7 +19,7 @@ from rq.registry import StartedJobRegistry, FinishedJobRegistry, FailedJobRegist
 from app import db, rq
 from dashboard.background import refresh_doi_background
 from dashboard.forms import DOIForm
-from dashboard.models import OAManual
+from dashboard.models import OAManual, JournalOAYearOverride
 
 
 dashboard_blueprint = Blueprint("dashboard", __name__)
@@ -120,3 +120,22 @@ def add_manual():
         db.session.add(oa_manual)
         db.session.commit()
     return redirect(url_for("dashboard.dashboard", doi=doi))
+
+
+@dashboard_blueprint.route("/journal-oa-year-override")
+@login_required
+def journal_oa_year_override():
+    issn_l = request.args.get("issn_l")
+    year = request.args.get("year")
+    if issn_l and year:
+        # check if it already exists
+        journal_oa_year_override = JournalOAYearOverride.query.filter_by(
+            issn_l=issn_l
+        ).first()
+        if journal_oa_year_override:
+            return redirect(url_for("dashboard.dashboard"))
+        else:
+            journal_oa_year = JournalOAYearOverride(issn_l=issn_l, oa_year=int(year))
+            db.session.add(journal_oa_year)
+            db.session.commit()
+            return redirect(url_for("dashboard.dashboard"))
