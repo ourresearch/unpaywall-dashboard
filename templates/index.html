@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <!-- Header -->
     <div class="card mb-3">
         <div class="bg-holder d-none d-lg-block bg-card"
              style="background-image:url(/static/assets/img/icons/spot-illustrations/corner-4.png);">
@@ -15,267 +16,59 @@
             </div>
         </div>
     </div>
+
+    <!-- Submit DOI Form -->
     {% if not result %}
-        <div class="card mb-3">
-            <div class="card-header">
-                <h5 class="mb-0" id="quick-start">Look up a DOI</h5>
-            </div>
-        {% if message %}
-            <div class="alert" role="alert">
-                {{ message }}
-            </div>
-            {% endif %}
-            <div class="card-body bg-light">
-                <form action="/" method="GET">
-                    <div class="mb-3">
-                        {{ form.doi.label(class="form-label") }}
-                        {{ form.doi(class="form-control") }}
-                        {% if form.doi.errors %}
-                            <ul class="errors">
-                                {% for error in form.doi.errors %}
-                                    <li>{{ error }}</li>{% endfor %}
-                            </ul>
-                        {% endif %}
-                    </div>
-                    {{ form.submit(class="btn btn-primary") }}
-                </form>
-            </div>
-        </div>
+        {% include "index_doi_form.html" %}
     {% endif %}
+
+    <!-- Results -->
     {% if result %}
         <div class="card mb-3">
-        <div class="card-header">
-        <div class="row flex-between-end">
-            <div class="col-auto align-self-center">
-                <h5 class="mb-0">DOI {{ doi }} <a href="{{ result.doi_url }}" target="_blank">
-                    <icon class="fas fa-external-link-square-alt"></icon>
-                </a></h5>
-            </div>
-            <div class="col-auto ms-auto">
-                <div class="flex-grow-1">
-                    <button class="btn btn-primary btn-sm" onclick="refreshDoi()" id="refreshDoiButton">Refresh</button>
-                    <a href="/add-manual?doi={{ doi }}" class="btn btn-danger btn-sm">Close DOI</a>
-                </div>
-            </div>
-            <div class="card-body">
-                <h5>{{ result.title }}</h5>
-                <p>Published by {{ result.publisher }} in {{ result.journal_name }} on {{ result.published_date }}</p>
-                <p>{% if result.is_oa %}
-                    <span class="badge badge-soft-success">Open Access</span>
-                    <span class="badge badge-soft-info">{{ result.oa_status }}</span>
-                {% else %}
-                    <span class="badge badge-soft-danger">Closed</span>
-                {% endif %}</p>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="overflow-hidden mt-4">
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item" role="presentation"><a
-                                        class="nav-link ps-0 active" id="description-tab"
-                                        data-bs-toggle="tab" href="#tab-description" role="tab"
-                                        aria-controls="tab-description" aria-selected="true">Best OA
-                                    Location</a>
-                                </li>
-                                <li class="nav-item" role="presentation"><a
-                                        class="nav-link px-2 px-md-3" id="specifications-tab"
-                                        data-bs-toggle="tab" href="#tab-specifications" role="tab"
-                                        aria-controls="tab-specifications" aria-selected="false"
-                                        tabindex="-1">Journal</a></li>
-                                <li class="nav-item" role="presentation"><a
-                                        class="nav-link px-2 px-md-3" id="reviews-tab"
-                                        data-bs-toggle="tab" href="#tab-reviews" role="tab"
-                                        aria-controls="tab-reviews" aria-selected="false"
-                                        tabindex="-1">Other OA Locations</a></li>
-                            </ul>
-                            <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade active show" id="tab-description"
-                                     role="tabpanel" aria-labelledby="description-tab">
-                                    <div class="mt-3">
-                                        <table class="table table-borderless">
-                                            <tbody>
-                                            {% if result.best_oa_location and result.best_oa_location.url %}
-                                                <tr>
-                                                    <td>URL</td>
-                                                    <td>
-                                                        <a href="{{ result.best_oa_location.url }}">{{ result.best_oa_location.url }}</a>
-                                                    </td>
-                                                </tr>
-                                            {% endif %}
-                                            {% if result.best_oa_location and result.best_oa_location.url_for_pdf %}
-                                                <tr>
-                                                    <td>PDF URL</td>
-                                                    <td>
-                                                        <a href="{{ result.best_oa_location.url_for_pdf }}">{{ result.best_oa_location.url_for_pdf }}</a>
-                                                    </td>
-                                                </tr>
-                                            {% endif %}
-                                            {% if result.best_oa_location and result.best_oa_location.url_for_landing_page %}
-                                                <tr>
-                                                    <td>Landing Page URL</td>
-                                                    <td>
-                                                        <a href="{{ result.best_oa_location.url_for_landing_page }}">{{ result.best_oa_location.url_for_landing_page }}</a>
-                                                    </td>
-                                                </tr>
-                                            {% endif %}
-                                            {% if result.best_oa_location and result.best_oa_location.evidence %}
-                                                <tr>
-                                                    <td>Evidence</td>
-                                                    <td>{{ result.best_oa_location.evidence }}</td>
-                                                </tr>
-                                            {% endif %}
-                                            {% if result.best_oa_location and result.best_oa_location.license %}
-                                                <tr>
-                                                    <td>Evidence</td>
-                                                    <td>{{ result.best_oa_location.license }}</td>
-                                                </tr>
-                                            {% endif %}
-                                            {% if result.best_oa_location and result.best_oa_location.version %}
-                                                <tr>
-                                                    <td>Version</td>
-                                                    <td>{{ result.best_oa_location.version }}</td>
-                                                </tr>
-                                            {% endif %}
-                                            {% if result.best_oa_location and result.best_oa_location.host_type %}
-                                                <tr>
-                                                    <td>Host Type</td>
-                                                    <td>{{ result.best_oa_location.host_type }}</td>
-                                                </tr>
-                                            {% endif %}
-                                            {% if result.best_oa_location and result.best_oa_location.pmh_id %}
-                                                <tr>
-                                                    <td>PMH ID</td>
-                                                    <td>{{ result.best_oa_location.pmh_id }}</td>
-                                                </tr>
-                                            {% endif %}
-                                            {% if result.best_oa_location and result.best_oa_location.endpoint_id %}
-                                                <tr>
-                                                    <td>Endpoint ID</td>
-                                                    <td>{{ result.best_oa_location.endpoint_id }}</td>
-                                                </tr>
-                                            {% endif %}
-                                            {% if result.best_oa_location and result.best_oa_location.repository_institution %}
-                                                <tr>
-                                                    <td>Repository Institution</td>
-                                                    <td>{{ result.best_oa_location.repository_institution }}</td>
-                                                </tr>
-                                            {% endif %}
-                                            {% if result.best_oa_location and result.best_oa_location.oa_date %}
-                                                <tr>
-                                                    <td>OA Date</td>
-                                                    <td>{{ result.best_oa_location.oa_date }}</td>
-                                                </tr>
-                                            {% endif %}
-                                            {% if result.updated %}
-                                                <tr>
-                                                    <td>Updated</td>
-                                                    <td>{{ result.updated }}</td>
-                                                </tr>
-                                            {% endif %}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="tab-specifications" role="tabpanel"
-                                     aria-labelledby="specifications-tab">
-                                    <div class="mt-3">
-                                        <table class='table table-borderless'>
-                                            <tbody>
-                                            <tr>
-                                                <td>Name</td>
-                                                <td>{{ result.journal_name }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Publisher</td>
-                                                <td>{{ result.publisher }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Journal is Open Access</td>
-                                                <td>{{ result.journal_is_oa }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Journal is In DOAJ</td>
-                                                <td>{{ result.journal_is_in_doaj }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>ISSN-L</td>
-                                                <td>{{ result.journal_issn_l }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>ISSNs</td>
-                                                <td>{{ result.journal_issns }}</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                        <form method="get" action="/journal-oa-year-override">
-                                            <p>Mark this journal as open access beginning with this year:</p>
-                                            <input type="hidden" name="issn_l" value="{{ result.journal_issn_l }}">
-                                            <input name="year" type="number" placeholder="Year">
-                                            <button type="submit" class="btn btn-primary">Submit</button>
-                                        </form>
-                                    </div>
-                                    <div class="tab-pane fade" id="tab-reviews" role="tabpanel"
-                                         aria-labelledby="reviews-tab">
-                                        <div class="row mt-3">
-                                            <div class="col-lg-6 mb-4 mb-lg-0">
-                                                <div class="mb-1">
-                                                </div>
-
-                                            </div>
-                                        </div>
+            <!-- Result header -->
+            <div class="card-header">
+                <div class="row flex-between-end">
+                    <div class="col-auto align-self-center">
+                        <h5 class="mb-0">DOI {{ doi }} <a href="{{ result.doi_url }}" target="_blank">
+                            <icon class="fas fa-external-link-square-alt"></icon>
+                        </a></h5>
+                    </div>
+                    <div class="col-auto ms-auto">
+                        <div class="flex-grow-1">
+                            <button class="btn btn-primary btn-sm" onclick="refreshDoi()" id="refreshDoiButton">Refresh
+                            </button>
+                            <a href="/add-manual?doi={{ doi }}" class="btn btn-danger btn-sm">Close DOI</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5>{{ result.title }}</h5>
+                        <p>Published by {{ result.publisher }} in {{ result.journal_name }}
+                            on {{ result.published_date }}</p>
+                        <p>{% if result.is_oa %}
+                            <span class="badge badge-soft-success">Open Access</span>
+                            <span class="badge badge-soft-info">{{ result.oa_status }}</span>
+                        {% else %}
+                            <span class="badge badge-soft-danger">Closed</span>
+                        {% endif %}</p>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="overflow-hidden mt-4">
+                                    {% include "index_tab_menu.html" %}
+                                    <div class="tab-content" id="myTabContent">
+                                        {% include "index_tab_best_oa.html" %}
+                                        {% include "index_tab_journal.html" %}
+                                        {% include "index_tab_other_oa.html" %}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="card-footer border-top">
-                <a class="btn btn-falcon-default btn-sm" href="/">New Search</a>
+                <div class="card-footer border-top">
+                    <a class="btn btn-falcon-default btn-sm" href="/">New Search</a>
+                </div>
             </div>
         </div>
-        <script>
-            function refreshDoi() {
-                fetch("/refresh-doi/{{ doi }}")
-                    .then((response) => response.json())
-                    .then((data) => getStatus(data.job_id));
-            }
-
-            function getStatus(jobId) {
-                fetch("/refresh-status/" + jobId)
-                    .then((response) => response.json())
-                    .then((data) => {
-                        if (data.status === "queued" || data.status === "started") {
-                            // change button to spinner and text to "Refreshing..."
-                            document.getElementById("refreshDoiButton").innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Refreshing...';
-                            console.log(data.status);
-                            // loop every 2 seconds
-                            setTimeout(() => getStatus(jobId), 2000);
-                        } else if (data.status === "finished") {
-                            if (data.result.switched_to_closed) {
-                                document.getElementById("refreshDoiButton").innerHTML = 'Switched to Closed';
-                                document.getElementById("refreshDoiButton").classList.remove("btn-primary");
-                                document.getElementById("refreshDoiButton").classList.add("btn-success");
-                            } else if (data.result.switched_to_open) {
-                                document.getElementById("refreshDoiButton").innerHTML = 'Switched to Open';
-                                document.getElementById("refreshDoiButton").classList.remove("btn-primary");
-                                document.getElementById("refreshDoiButton").classList.add("btn-success");
-                            } else if (data.result.is_changed) {
-                                document.getElementById("refreshDoiButton").innerHTML = 'Changed';
-                                document.getElementById("refreshDoiButton").classList.remove("btn-primary");
-                                document.getElementById("refreshDoiButton").classList.add("btn-success");
-                            } else {
-                                document.getElementById("refreshDoiButton").innerHTML = 'No Change';
-                                document.getElementById("refreshDoiButton").classList.remove("btn-primary");
-                                document.getElementById("refreshDoiButton").classList.add("btn-success");
-                            }
-                        } else {
-                            // change button class to danger and text to "Error"
-                            document.getElementById("refreshDoiButton").innerHTML = 'Error';
-                            document.getElementById("refreshDoiButton").classList.remove("btn-primary");
-                            document.getElementById("refreshDoiButton").classList.add("btn-danger");
-                        }
-                    });
-            }
-        </script>
+        {% include "index_script.html" %}
     {% endif %}
 {% endblock %}

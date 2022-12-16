@@ -1,0 +1,25 @@
+<div class="card mb-3">
+    <div class="card-header">
+        <h5 class="mb-0" id="quick-start">Look up a DOI</h5>
+    </div>
+{% if message %}
+    <div class="alert" role="alert">
+        {{ message }}
+    </div>
+    {% endif %}
+    <div class="card-body bg-light">
+        <form action="/" method="GET">
+            <div class="mb-3">
+                {{ form.doi.label(class="form-label") }}
+                {{ form.doi(class="form-control") }}
+                {% if form.doi.errors %}
+                    <ul class="errors">
+                        {% for error in form.doi.errors %}
+                            <li>{{ error }}</li>{% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            {{ form.submit(class="btn btn-primary") }}
+        </form>
+    </div>
+</div>

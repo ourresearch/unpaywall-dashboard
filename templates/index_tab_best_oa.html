@@ -1,0 +1,87 @@
+<div class="tab-pane fade active show" id="tab-best-oa"
+     role="tabpanel" aria-labelledby="best-oa-tab">
+    <div class="mt-3">
+        <table class="table table-borderless">
+            <tbody>
+            {% if result.best_oa_location and result.best_oa_location.url %}
+                <tr>
+                    <td>URL</td>
+                    <td>
+                        <a href="{{ result.best_oa_location.url }}">{{ result.best_oa_location.url }}</a>
+                    </td>
+                </tr>
+            {% endif %}
+            {% if result.best_oa_location and result.best_oa_location.url_for_pdf %}
+                <tr>
+                    <td>PDF URL</td>
+                    <td>
+                        <a href="{{ result.best_oa_location.url_for_pdf }}">{{ result.best_oa_location.url_for_pdf }}</a>
+                    </td>
+                </tr>
+            {% endif %}
+            {% if result.best_oa_location and result.best_oa_location.url_for_landing_page %}
+                <tr>
+                    <td>Landing Page URL</td>
+                    <td>
+                        <a href="{{ result.best_oa_location.url_for_landing_page }}">{{ result.best_oa_location.url_for_landing_page }}</a>
+                    </td>
+                </tr>
+            {% endif %}
+            {% if result.best_oa_location and result.best_oa_location.evidence %}
+                <tr>
+                    <td>Evidence</td>
+                    <td>{{ result.best_oa_location.evidence }}</td>
+                </tr>
+            {% endif %}
+            {% if result.best_oa_location and result.best_oa_location.license %}
+                <tr>
+                    <td>Evidence</td>
+                    <td>{{ result.best_oa_location.license }}</td>
+                </tr>
+            {% endif %}
+            {% if result.best_oa_location and result.best_oa_location.version %}
+                <tr>
+                    <td>Version</td>
+                    <td>{{ result.best_oa_location.version }}</td>
+                </tr>
+            {% endif %}
+            {% if result.best_oa_location and result.best_oa_location.host_type %}
+                <tr>
+                    <td>Host Type</td>
+                    <td>{{ result.best_oa_location.host_type }}</td>
+                </tr>
+            {% endif %}
+            {% if result.best_oa_location and result.best_oa_location.pmh_id %}
+                <tr>
+                    <td>PMH ID</td>
+                    <td>{{ result.best_oa_location.pmh_id }}</td>
+                </tr>
+            {% endif %}
+            {% if result.best_oa_location and result.best_oa_location.endpoint_id %}
+                <tr>
+                    <td>Endpoint ID</td>
+                    <td>{{ result.best_oa_location.endpoint_id }}</td>
+                </tr>
+            {% endif %}
+            {% if result.best_oa_location and result.best_oa_location.repository_institution %}
+                <tr>
+                    <td>Repository Institution</td>
+                    <td>{{ result.best_oa_location.repository_institution }}</td>
+                </tr>
+            {% endif %}
+            {% if result.best_oa_location and result.best_oa_location.oa_date %}
+                <tr>
+                    <td>OA Date</td>
+                    <td>{{ result.best_oa_location.oa_date }}</td>
+                </tr>
+            {% endif %}
+            {% if result.updated %}
+                <tr>
+                    <td>Updated</td>
+                    <td>{{ result.updated }}</td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>

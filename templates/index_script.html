@@ -1,0 +1,44 @@
+<script>
+    function refreshDoi() {
+        fetch("/refresh-doi/{{ doi }}")
+            .then((response) => response.json())
+            .then((data) => getStatus(data.job_id));
+    }
+
+    function getStatus(jobId) {
+        fetch("/refresh-status/" + jobId)
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.status === "queued" || data.status === "started") {
+                    // change button to spinner and text to "Refreshing..."
+                    document.getElementById("refreshDoiButton").innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Refreshing...';
+                    console.log(data.status);
+                    // loop every 2 seconds
+                    setTimeout(() => getStatus(jobId), 2000);
+                } else if (data.status === "finished") {
+                    if (data.result.switched_to_closed) {
+                        document.getElementById("refreshDoiButton").innerHTML = 'Switched to Closed';
+                        document.getElementById("refreshDoiButton").classList.remove("btn-primary");
+                        document.getElementById("refreshDoiButton").classList.add("btn-success");
+                    } else if (data.result.switched_to_open) {
+                        document.getElementById("refreshDoiButton").innerHTML = 'Switched to Open';
+                        document.getElementById("refreshDoiButton").classList.remove("btn-primary");
+                        document.getElementById("refreshDoiButton").classList.add("btn-success");
+                    } else if (data.result.is_changed) {
+                        document.getElementById("refreshDoiButton").innerHTML = 'Changed';
+                        document.getElementById("refreshDoiButton").classList.remove("btn-primary");
+                        document.getElementById("refreshDoiButton").classList.add("btn-success");
+                    } else {
+                        document.getElementById("refreshDoiButton").innerHTML = 'No Change';
+                        document.getElementById("refreshDoiButton").classList.remove("btn-primary");
+                        document.getElementById("refreshDoiButton").classList.add("btn-success");
+                    }
+                } else {
+                    // change button class to danger and text to "Error"
+                    document.getElementById("refreshDoiButton").innerHTML = 'Error';
+                    document.getElementById("refreshDoiButton").classList.remove("btn-primary");
+                    document.getElementById("refreshDoiButton").classList.add("btn-danger");
+                }
+            });
+    }
+</script>
