@@ -46,7 +46,15 @@
                             on {{ result.published_date }}</p>
                         <p>{% if result.is_oa %}
                             <span class="badge badge-soft-success">Open Access</span>
-                            <span class="badge badge-soft-info">{{ result.oa_status }}</span>
+                            {% if result.oa_status == "gold" %}
+                                <span class="badge" style="color: black; background-color: #FFD700">{{ result.oa_status }}</span>
+                            {% elif result.oa_status == "green" %}
+                                <span class="badge bg-success">{{ result.oa_status }}</span>
+                            {% elif result.oa_status == "bronze" %}
+                                <span class="badge" style="background-color: #CD7F32">{{ result.oa_status }}</span>
+                            {% else %}
+                                <span class="badge bg-info">{{ result.oa_status }}</span>
+                            {% endif %}
                         {% else %}
                             <span class="badge badge-soft-danger">Closed</span>
                         {% endif %}</p>
