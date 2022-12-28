@@ -30,7 +30,8 @@
                 <div class="row flex-between-end">
                     <div class="col-auto align-self-center">
                         <h5 class="mb-0">DOI {{ doi }} <a href="{{ result.doi_url }}" target="_blank">
-                            <icon class="fas fa-external-link-square-alt"></icon>
+                            <icon class="fas fa-external-link-square-alt"></icon></a> <a href="https://api.unpaywall.org/v2/{{ result.doi_url }}?email=support@unpaywall.org" target="_blank">
+                            <icon class="fas fa-code"></icon>
                         </a></h5>
                     </div>
                     <div class="col-auto ms-auto">
