@@ -30,6 +30,7 @@ dashboard_blueprint = Blueprint("dashboard", __name__)
 def dashboard():
     form = DOIForm()
     doi = request.args.get("doi")
+    message = request.args.get("message")
     result = None
     if doi:
         r = requests.get(
@@ -116,9 +117,11 @@ def refresh_status(job_id):
 def add_manual():
     doi = request.args.get("doi")
     if doi:
-        oa_manual = OAManual(doi=doi)
-        db.session.add(oa_manual)
-        db.session.commit()
+        doi = doi.strip().replace("https://doi.org/", "")
+        if not OAManual.query.filter_by(doi=doi).first():
+            oa_manual = OAManual(doi=doi)
+            db.session.add(oa_manual)
+            db.session.commit()
     return redirect(url_for("dashboard.dashboard", doi=doi))
 
 
