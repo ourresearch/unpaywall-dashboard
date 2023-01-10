@@ -18,7 +18,7 @@
     </div>
 
     <!-- Submit DOI Form -->
-    {% if not result %}
+    {% if not result and not not_in_unpaywall %}
         {% include "index_doi_form.html" %}
     {% endif %}
 
@@ -79,5 +79,17 @@
             </div>
         </div>
         {% include "index_script.html" %}
+    {% elif not_in_unpaywall %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5>DOI {{ doi }} is not in Unpaywall</h5>
+                <br>
+                <p><a href="https://api.crossref.org/works/{{doi}}" target="_blank">Is it in crossref</a>?</p>
+                <p>If not check the help article <a href="https://support.unpaywall.org/support/solutions/articles/44001900286-which-dois-does-unpaywall-cover-">here</a>.</p>
+            </div>
+            <div class="card-footer border-top">
+                <a class="btn btn-falcon-default btn-sm" href="/">New Search</a>
+            </div>
+        </div>
     {% endif %}
 {% endblock %}

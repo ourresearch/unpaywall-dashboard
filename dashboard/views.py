@@ -30,15 +30,22 @@ dashboard_blueprint = Blueprint("dashboard", __name__)
 def dashboard():
     form = DOIForm()
     doi = request.args.get("doi")
-    message = request.args.get("message")
+    not_in_unpaywall = False
     result = None
     if doi:
         r = requests.get(
             f"https://api.unpaywall.org/v2/{doi}?email=support@unpaywall.org"
         )
-        result = dict(r.json())
+        if "HTTP_status_code" in r.json() and r.json()["HTTP_status_code"] == 404:
+            result = None
+            not_in_unpaywall = True
+        else:
+            result = dict(r.json())
+    # look up doi with crossref api
+    # if doi:
+    #     r = requests.get(f"https://api.crossref.org/works/{doi}")
     return render_template(
-        "index.html", current_user=current_user, form=form, result=result, doi=doi
+        "index.html", current_user=current_user, form=form, result=result, doi=doi, not_in_unpaywall=not_in_unpaywall
     )
 
 
