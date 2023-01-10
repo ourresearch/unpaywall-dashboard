@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- Header -->
+    <div class="card mb-3">
+        <div class="bg-holder d-none d-lg-block bg-card"
+             style="background-image:url(/static/assets/img/icons/spot-illustrations/corner-4.png);">
+        </div>
+        <!--/.bg-holder-->
+
+        <div class="card-body position-relative">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h3 class="mb-0">Guide - common problems</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">The link is not working correctly</h5>
+            <p>When someone says the link does not correctly, they mean the best available version link.</p>
+            <ol>
+                <li>Go to the publisher website to see what the actual article content looks like, if it is available.</li>
+                <li>Check the link that we have in Unpaywall under Best OA Location -> URL</li>
+                <li>If the content in both places match then there is not a problem. Ask the user for clarification.</li>
+                <li>Refresh the page by clicking the Refresh button. You can see if the link to the content changes.</li>
+                <li>If the content requires a subscription on the publisher website, and the link to the content is incorrect,
+                then you should make the content closed access by clicking the Close DOI button.</li>
+                <li>If the content is available on the publisher website, but the Unpaywall link is incorrect, then you should
+                escelate the ticket to someone else.</li>
+            </ol>
+        </div>
+{% endblock %}

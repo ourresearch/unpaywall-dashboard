@@ -125,6 +125,12 @@ def add_manual():
     return redirect(url_for("dashboard.dashboard", doi=doi))
 
 
+@dashboard_blueprint.route("/guide")
+@login_required
+def guide():
+    return render_template("guide.html", current_user=current_user)
+
+
 @dashboard_blueprint.route("/journal-oa-year-override")
 @login_required
 def journal_oa_year_override():
