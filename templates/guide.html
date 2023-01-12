@@ -19,17 +19,23 @@
 
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">The link is not working correctly</h5>
-            <p>When someone says the link does not correctly, they mean the best available version link.</p>
+            <h5 class="card-title">How to check a DOI</h5>
+            <p>When someone says something is wrong with an article, follow these steps to check if there is a problem.</p>
             <ol>
-                <li>Go to the publisher website to see what the actual article content looks like, if it is available.</li>
-                <li>Check the link that we have in Unpaywall under Best OA Location -> URL</li>
-                <li>If the content in both places match then there is not a problem. Ask the user for clarification.</li>
-                <li>Refresh the page by clicking the Refresh button. You can see if the link to the content changes.</li>
-                <li>If the content requires a subscription on the publisher website, and the link to the content is incorrect,
-                then you should make the content closed access by clicking the Close DOI button.</li>
-                <li>If the content is available on the publisher website, but the Unpaywall link is incorrect, then you should
-                escelate the ticket to someone else.</li>
+                <li>Get the DOI from the ticket, or if the person links to an article, go to the article and find the DOI.</li>
+                <li>Enter the DOI into the dashboard so you can see the details.</li>
+                <li>Go to the "official" version of the article, which is found by clicking the blue arror next to the DOI. This
+                 is the same as going to https://doi.org/exampledoi</li>
+                <li>Look at the article title, authors, and see if you have to pay to access the article.</li>
+                <li>Go back to the dashboard and look at the link that we have under Best OA Location -> URL. Visit this link.
+                Does the article it goes to match the official version? If the article is free on the official version then
+                we should point to that.</li>
+                <li>If the official version of the article is not free, are we pointing to another version? Does it match the
+                title and authors (generally)? If so then everything is correct, if not, try refreshing.</li>
+                <li>After refreshing, has the link changed? If you have to pay to access the article, and the link we are
+                pointing to is an incorrect article, then click Close DOI.</li>
+                <li>If the official version is free and we are not pointing to it, and refreshing does not change anything, then there
+                is nothing else you can do. Likely we are having problems scraping the official site. Leave the ticket open.</li>
             </ol>
         </div>
 {% endblock %}
