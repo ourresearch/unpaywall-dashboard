@@ -32,6 +32,7 @@ def dashboard():
     doi = request.args.get("doi")
     not_in_unpaywall = False
     result = None
+    other_oa_locations = []
     if doi:
         r = requests.get(
             f"https://api.unpaywall.org/v2/{doi}?email=support@unpaywall.org"
@@ -41,11 +42,17 @@ def dashboard():
             not_in_unpaywall = True
         else:
             result = dict(r.json())
-    # look up doi with crossref api
-    # if doi:
-    #     r = requests.get(f"https://api.crossref.org/works/{doi}")
+        other_oa_locations = (
+            result.get("oa_locations")[1:] if result.get("oa_locations") else []
+        )
     return render_template(
-        "index.html", current_user=current_user, form=form, result=result, doi=doi, not_in_unpaywall=not_in_unpaywall
+        "index.html",
+        current_user=current_user,
+        form=form,
+        result=result,
+        doi=doi,
+        not_in_unpaywall=not_in_unpaywall,
+        other_oa_locations=other_oa_locations,
     )
 
 

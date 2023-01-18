@@ -1,10 +1,94 @@
 <div class="tab-pane fade" id="tab-other-oa" role="tabpanel"
      aria-labelledby="other-oa-tab">
     <div class="row mt-3">
-        <div class="col-lg-6 mb-4 mb-lg-0">
-            <div class="mb-1">
-            </div>
-
+    {%  if not other_oa_locations %}
+        <p>No other open access locations for this DOI.</p>
+    {% endif %}
+    {% for location in other_oa_locations %}
+        <b>Other location #{{ loop.index }}</b>
+        <table class="table table-borderless">
+            <tbody>
+                {% if location and location.url %}
+                    <tr>
+                        <td>URL</td>
+                        <td>
+                            <a href="{{ location.url }}">{{ location.url }}</a>
+                        </td>
+                    </tr>
+                {% endif %}
+                {% if location and location.url_for_pdf %}
+                    <tr>
+                        <td>PDF URL</td>
+                        <td>
+                            <a href="{{ location.url_for_pdf }}">{{ location.url_for_pdf }}</a>
+                        </td>
+                    </tr>
+                {% endif %}
+                {% if location and location.url_for_landing_page %}
+                    <tr>
+                        <td>Landing Page URL</td>
+                        <td>
+                            <a href="{{ location.url_for_landing_page }}">{{ location.url_for_landing_page }}</a>
+                        </td>
+                    </tr>
+                {% endif %}
+                {% if location and location.evidence %}
+                    <tr>
+                        <td>Evidence</td>
+                        <td>{{ location.evidence }}</td>
+                    </tr>
+                {% endif %}
+                {% if location and location.license %}
+                    <tr>
+                        <td>Evidence</td>
+                        <td>{{ location.license }}</td>
+                    </tr>
+                {% endif %}
+                {% if location and location.version %}
+                    <tr>
+                        <td>Version</td>
+                        <td>{{ location.version }}</td>
+                    </tr>
+                {% endif %}
+                {% if location and location.host_type %}
+                    <tr>
+                        <td>Host Type</td>
+                        <td>{{ location.host_type }}</td>
+                    </tr>
+                {% endif %}
+                {% if location and location.pmh_id %}
+                    <tr>
+                        <td>PMH ID</td>
+                        <td>{{ location.pmh_id }}</td>
+                    </tr>
+                {% endif %}
+                {% if location and location.endpoint_id %}
+                    <tr>
+                        <td>Endpoint ID</td>
+                        <td>{{ location.endpoint_id }}</td>
+                    </tr>
+                {% endif %}
+                {% if location and location.repository_institution %}
+                    <tr>
+                        <td>Repository Institution</td>
+                        <td>{{ location.repository_institution }}</td>
+                    </tr>
+                {% endif %}
+                {% if location and location.oa_date %}
+                    <tr>
+                        <td>OA Date</td>
+                        <td>{{ location.oa_date }}</td>
+                    </tr>
+                {% endif %}
+                {% if location.updated %}
+                    <tr>
+                        <td>Updated</td>
+                        <td>{{ location.updated }}</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    {% endfor %}
         </div>
     </div>
 </div>
