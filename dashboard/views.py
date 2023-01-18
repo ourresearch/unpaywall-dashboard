@@ -62,7 +62,7 @@ def refresh_doi():
     form = DOIForm()
     if form.validate_on_submit():
         refresh_doi_background.queue(
-            form.doi.data, description=form.doi.data, result_ttl=5000
+            form.doi.data, description=form.doi.data, result_ttl=24 * 60 * 60
         )
         time.sleep(0.3)
         return redirect(url_for("dashboard.refresh_doi"))
@@ -104,8 +104,8 @@ def refresh_doi():
 
 @dashboard_blueprint.route("/refresh-doi/<path:doi>")
 @login_required
-def start_fresh(doi):
-    job = refresh_doi_background.queue(doi, description=doi, result_ttl=5000)
+def start_refresh(doi):
+    job = refresh_doi_background.queue(doi, description=doi, result_ttl=24*60*60)
     return jsonify({"job_id": job.get_id()})
 
 

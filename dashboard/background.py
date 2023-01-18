@@ -1,4 +1,5 @@
 import os
+import time
 import heroku3
 import requests
 
@@ -18,6 +19,8 @@ def refresh_doi_background(doi):
     app = heroku_conn.apps()["articlepage"]
     command = f"python queue_pub.py --method=refresh --id='{doi}'"
     output = app.run_command(command, printout=True)
+
+    time.sleep(5)
 
     # get the new version of the record
     r = requests.get(url)
