@@ -20,6 +20,7 @@ from app import db, rq
 from dashboard.background import refresh_doi_background
 from dashboard.forms import DOIForm
 from dashboard.models import OAManual, JournalOAYearOverride
+from dashboard.utils import is_doi_manually_closed
 
 
 dashboard_blueprint = Blueprint("dashboard", __name__)
@@ -33,6 +34,7 @@ def dashboard():
     not_in_unpaywall = False
     result = None
     other_oa_locations = []
+    manually_closed = is_doi_manually_closed(doi)
     if doi:
         r = requests.get(
             f"https://api.unpaywall.org/v2/{doi}?email=support@unpaywall.org"
@@ -51,6 +53,7 @@ def dashboard():
         form=form,
         result=result,
         doi=doi,
+        manually_closed=manually_closed,
         not_in_unpaywall=not_in_unpaywall,
         other_oa_locations=other_oa_locations,
     )
@@ -136,6 +139,18 @@ def add_manual():
             oa_manual = OAManual(doi=doi)
             db.session.add(oa_manual)
             db.session.commit()
+    return redirect(url_for("dashboard.dashboard", doi=doi))
+
+
+@dashboard_blueprint.route("/open-doi")
+@login_required
+def open_doi():
+    doi = request.args.get("doi")
+    if doi:
+        doi = doi.strip().replace("https://doi.org/", "")
+        oa_manual = OAManual.query.filter_by(doi=doi).first()
+        db.session.delete(oa_manual)
+        db.session.commit()
     return redirect(url_for("dashboard.dashboard", doi=doi))
 
 

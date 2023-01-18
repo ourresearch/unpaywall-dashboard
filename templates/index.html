@@ -38,7 +38,11 @@
                         <div class="flex-grow-1">
                             <button class="btn btn-primary btn-sm" onclick="refreshDoi()" id="refreshDoiButton">Refresh
                             </button>
-                            <a href="/add-manual?doi={{ doi }}" class="btn btn-danger btn-sm">Close DOI</a>
+                            {% if manually_closed %}
+                                <a href="/open-doi?doi={{ doi }}" class="btn btn-success btn-sm">Open DOI</a>
+                            {% else %}
+                                <a href="/add-manual?doi={{ doi }}" class="btn btn-danger btn-sm">Close DOI</a>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="card-body">
