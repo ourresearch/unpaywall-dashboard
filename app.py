@@ -1,12 +1,21 @@
 import os
 
 from flask import Flask
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
 
 from extensions import db, login_manager, rq
 import auth
 import dashboard
 
 app = Flask(__name__)
+
+sentry_sdk.init(
+    dsn=os.environ.get("SENTRY_DSN"),
+    integrations=[
+        FlaskIntegration(),
+    ],
+)
 
 uri = os.environ.get("DATABASE_URL")
 if uri.startswith("postgres://"):
