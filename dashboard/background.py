@@ -20,7 +20,7 @@ def refresh_doi_background(doi):
     command = f"python queue_pub.py --method=refresh --id='{doi}'"
     output = app.run_command(command, printout=True)
 
-    time.sleep(5)
+    time.sleep(2)
 
     # get the new version of the record
     r = requests.get(url)
