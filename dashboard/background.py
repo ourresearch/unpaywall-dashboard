@@ -28,9 +28,13 @@ def refresh_doi_background(doi):
 
     # compare the two
     is_changed = False
-    for k, v in old.get("best_oa_location", {}).items():
-        if k != "updated" and new["best_oa_location"].get(k) != v:
-            is_changed = True
+    if old.get("best_oa_location") and not new.get("best_oa_location"):
+        is_changed = True
+
+    if old.get("best_oa_location") and new.get("best_oa_location"):
+        for k, v in old.get("best_oa_location", {}).items():
+            if k != "updated" and new["best_oa_location"].get(k) != v:
+                is_changed = True
     if old.get("oa_status") != new.get("oa_status"):
         is_changed = True
 
