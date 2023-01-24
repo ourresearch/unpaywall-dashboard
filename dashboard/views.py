@@ -108,7 +108,7 @@ def refresh_doi():
 @dashboard_blueprint.route("/refresh-doi/<path:doi>")
 @login_required
 def start_refresh(doi):
-    job = refresh_doi_background.queue(doi, description=doi, result_ttl=24 * 60 * 60)
+    job = refresh_doi_background.queue(doi, description=doi, result_ttl=24 * 60 * 60, timeout=60 * 10)
     return jsonify({"job_id": job.get_id()})
 
 
