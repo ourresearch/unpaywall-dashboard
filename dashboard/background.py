@@ -13,6 +13,9 @@ def refresh_doi_background(doi):
     r = requests.get(url)
     old = r.json()
 
+    switched_to_closed = False
+    switched_to_open = False
+
     # refresh the record
     HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY")
     heroku_conn = heroku3.from_key(HEROKU_API_KEY)
