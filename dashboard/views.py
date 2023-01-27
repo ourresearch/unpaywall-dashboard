@@ -44,9 +44,12 @@ def dashboard():
             not_in_unpaywall = True
         else:
             result = dict(r.json())
-        other_oa_locations = (
-            result.get("oa_locations")[1:] if result.get("oa_locations") else []
-        )
+
+        if result and result.get("oa_locations"):
+            other_oa_locations = result.get("oa_locations")[1:]
+        else:
+            other_oa_locations = []
+
     return render_template(
         "index.html",
         current_user=current_user,
