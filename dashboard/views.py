@@ -33,6 +33,7 @@ def dashboard():
     form = DOIForm()
     doi = request.args.get("doi")
     not_in_unpaywall = False
+    http_url = None
     result = None
     other_oa_locations = []
     manually_closed = is_doi_manually_closed(doi)
