@@ -10,3 +10,20 @@ def is_doi_manually_closed(doi):
         else:
             return False
     return False
+
+
+def insecure_url(result):
+    if result and "best_oa_location" in result:
+        if "url" in result["best_oa_location"] and result["best_oa_location"][
+            "url"
+        ].startswith("http://"):
+            return result["best_oa_location"]["url"]
+        elif "url_for_pdf" in result["best_oa_location"] and result["best_oa_location"][
+            "url_for_pdf"
+        ].startswith("http://"):
+            return result["best_oa_location"]["url_for_pdf"]
+        elif "url_for_landing_page" in result["best_oa_location"] and result[
+            "best_oa_location"
+        ]["url_for_landing_page"].startswith("http://"):
+            return result["best_oa_location"]["url_for_landing_page"]
+    return None

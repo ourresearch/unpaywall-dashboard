@@ -1,5 +1,6 @@
 import time
 import re
+from urllib.parse import urlparse
 
 from flask import (
     Blueprint,
@@ -19,8 +20,8 @@ from rq.registry import StartedJobRegistry, FinishedJobRegistry, FailedJobRegist
 from app import db, rq
 from dashboard.background import refresh_doi_background
 from dashboard.forms import DOIForm
-from dashboard.models import OAManual, JournalOAYearOverride
-from dashboard.utils import is_doi_manually_closed
+from dashboard.models import OAManual, JournalOAYearOverride, ConvertedToHttps
+from dashboard.utils import is_doi_manually_closed, insecure_url
 
 
 dashboard_blueprint = Blueprint("dashboard", __name__)
@@ -50,12 +51,16 @@ def dashboard():
         else:
             other_oa_locations = []
 
+        if result:
+            http_url = insecure_url(result)
+
     return render_template(
         "index.html",
         current_user=current_user,
         form=form,
         result=result,
         doi=doi,
+        http_url=http_url,
         manually_closed=manually_closed,
         not_in_unpaywall=not_in_unpaywall,
         other_oa_locations=other_oa_locations,
@@ -111,7 +116,9 @@ def refresh_doi():
 @dashboard_blueprint.route("/refresh-doi/<path:doi>")
 @login_required
 def start_refresh(doi):
-    job = refresh_doi_background.queue(doi, description=doi, result_ttl=24 * 60 * 60, timeout=60 * 10)
+    job = refresh_doi_background.queue(
+        doi, description=doi, result_ttl=24 * 60 * 60, timeout=60 * 10
+    )
     return jsonify({"job_id": job.get_id()})
 
 
@@ -180,3 +187,16 @@ def journal_oa_year_override():
             db.session.add(journal_oa_year)
             db.session.commit()
             return redirect(url_for("dashboard.dashboard"))
+
+
+@dashboard_blueprint.route("/convert-domain-to-https")
+@login_required
+def convert_domain_to_https():
+    url = request.args.get("url")
+    doi = request.args.get("doi")
+    hostname = urlparse(url).hostname
+    if hostname:
+        c = ConvertedToHttps(hostname=hostname)
+        db.session.add(c)
+        db.session.commit()
+    return redirect(url_for("dashboard.dashboard", doi=doi))

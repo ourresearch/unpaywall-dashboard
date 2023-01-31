@@ -27,6 +27,16 @@
                     </td>
                 </tr>
             {% endif %}
+            {% if http_url %}
+                <tr>
+                    <td>Convert http URL to https?</td>
+                    <td>
+                        Does this http link <a href="{{ http_url }}" target="_blank">{{ http_url }}</a> work the same as this
+                        <a href="{{ http_url | replace('http://', 'https://') }}" target="_blank">https</a> version?
+                        If so, <a href="{{ url_for('dashboard.convert_domain_to_https', doi=doi, url=http_url) }}">click here</a> to convert it to https.
+                    </td>
+                </tr>
+            {% endif %}
             {% if result.best_oa_location and result.best_oa_location.evidence %}
                 <tr>
                     <td>Evidence</td>

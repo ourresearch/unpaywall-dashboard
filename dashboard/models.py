@@ -18,3 +18,13 @@ class JournalOAYearOverride(db.Model):
 
     issn_l = db.Column(db.Text, primary_key=True)
     oa_year = db.Column(db.Integer)
+
+
+class ConvertedToHttps(db.Model):
+    """Model for to convert all URLs from a domain from http to https."""
+
+    __bind_key__ = "unpaywall_db"
+    __tablename__ = "convert_http_to_https"
+
+    id = db.Column(db.Integer, primary_key=True)
+    hostname = db.Column(db.Text, unique=True)
