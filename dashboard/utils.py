@@ -13,7 +13,7 @@ def is_doi_manually_closed(doi):
 
 
 def insecure_url(result):
-    if result and "best_oa_location" in result:
+    if result and "best_oa_location" in result and result["best_oa_location"]:
         if "url" in result["best_oa_location"] and result["best_oa_location"][
             "url"
         ].startswith("http://"):
