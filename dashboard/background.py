@@ -19,7 +19,7 @@ def refresh_doi_background(doi):
     # refresh the record
     HEROKU_API_KEY = os.environ.get("HEROKU_API_KEY")
     heroku_conn = heroku3.from_key(HEROKU_API_KEY)
-    app = heroku_conn.apps()["articlepage"]
+    app = heroku_conn.apps()["oadoi"]
     command = f"python queue_pub.py --method=refresh --id='{doi}'"
     output = app.run_command(command, printout=True)
 
